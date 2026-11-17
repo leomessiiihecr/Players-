@@ -3,142 +3,174 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>شجرة بطولة الأساطير</title>
+<title>تحدي الـ 15$ • ابنِ فريقك الخماسي</title>
 <link href="https://googleapis.com" rel="stylesheet">
 <style>
-:root{--bg:#cfc6ad;--paper:#ede6d8;--ink:#2b2620;--slot:#e2d9c6;--line:#8e5b53;--gold:#a07d2a}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#cfc6ad;--paper:#ede6d8;--ink:#2b2620;--card:#e4dccb;--line:#c9bfa8;--green:#4a7c59;--red:#b54a42}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-serif;padding:8px}
-.board{background:var(--paper);border-radius:20px;padding:12px 8px;max-width:600px;margin:0 auto;box-shadow:0 6px 24px #0002;text-align:center}
-h1{font-family:'Aref Ruqaa',serif;font-size:32px;margin:0 0 4px;color:#231f1a}
-.sub{font-size:11px;color:#6e6555;margin-bottom:12px}
-.bracket{position:relative;width:100%;aspect-ratio:1/1.05;max-height:540px;margin:0 auto;direction:ltr}
-svg.lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-svg.lines path{fill:none;stroke:var(--line);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;opacity:.55}
-.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;cursor:pointer;z-index:2;transition:transform .15s}
-.node:active{transform:translate(-50%,-50%) scale(.92)}
-.av{width:46px;height:46px;border-radius:50%;background-color:var(--slot);background-size:cover;background-position:center;border:2.5px solid #fff;box-shadow:0 3px 8px #0002;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#8c8270}
-.sf .av{width:50px;height:50px;border-color:#b07850}
-.fin .av{width:54px;height:54px;border-color:#8e5b53}
-.win .av{width:68px;height:68px;border:3.5px solid var(--gold);box-shadow:0 0 18px #a07d2a66}
-.node span{font-size:9.5px;font-weight:800;background:#ede6d8e6;padding:1px 5px;border-radius:6px;margin-top:2px;white-space:nowrap;color:#231f1a}
-.win span{background:var(--gold);color:#fff;font-size:11px;padding:2px 8px}
-.tools{margin-top:12px;display:flex;justify-content:center;gap:8px}
-button{border:0;background:#2b2620;color:#ede6d8;border-radius:14px;padding:9px 18px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
-button.save{background:#5d7a58;color:#fff}
+.board{background:var(--paper);border-radius:20px;padding:12px;max-width:600px;margin:0 auto;box-shadow:0 6px 24px #0002}
+header{text-align:center;margin-bottom:10px}
+h1{font-family:'Aref Ruqaa',serif;font-size:32px;margin:0;color:#231f1a}
+.sub{font-size:12px;color:#6e6555;margin-top:2px}
+.hud{display:flex;justify-content:space-between;align-items:center;background:#2b2620;color:#ede6d8;padding:10px 16px;border-radius:14px;margin-bottom:10px;position:sticky;top:6px;z-index:5;box-shadow:0 4px 12px #0003}
+.hud b{font-size:18px;color:#8fd19e}
+.hud b.warn{color:#ff8a80}
+.tier{display:flex;align-items:stretch;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:6px;overflow:hidden}
+.price{width:54px;flex:none;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:18px;font-family:Georgia,serif}
+.p-list{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px}
+.p-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 2px;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.15s}
+.p-item.sel{background:#4a7c5922;border-color:var(--green)}
+.p-item.dis{opacity:.35;pointer-events:none}
+.av{width:46px;height:46px;border-radius:50%;background-size:cover;background-position:center;border:2px solid #fff;box-shadow:0 2px 5px #0002;background-color:#d5ccb8}
+.p-item span{font-size:10px;font-weight:700;text-align:center;line-height:1.15}
+.squad{margin-top:12px;background:#e6dfd1;border:1.5px dashed #9e937d;border-radius:14px;padding:10px;text-align:center}
+.squad h3{margin:0 0 8px;font-size:13px;color:#5a5245}
+.slots{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.slot{aspect-ratio:1/1.25;background:var(--paper);border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3px}
+.slot .av{width:42px;height:42px}
+.slot span{font-size:9px;font-weight:800;margin-top:3px;line-height:1.1}
+.slot small{font-size:9px;color:var(--green);font-weight:800}
+.msg{text-align:center;font-size:12px;font-weight:800;color:var(--red);height:18px;margin-top:6px}
+.tools{display:flex;justify-content:center;gap:8px;margin-top:8px}
+button{border:0;background:#2b2620;color:#ede6d8;border-radius:12px;padding:9px 18px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
+button.save{background:var(--green);color:#fff}
+button.save:disabled{opacity:.4;cursor:not-allowed}
 </style>
 </head>
 <body>
 <div class="board">
-<h1>بطولة الأساطير</h1>
-<div class="sub">اضغط على اللاعب الفائز في كل مواجهة ليتأهل للنهائي</div>
-<div class="bracket" id="bracket"></div>
+<header>
+<h1>تحدي الـ 15$</h1>
+<div class="sub">اختر 5 لاعبين فقط دون أن تتجاوز ميزانيتك</div>
+</header>
+<div class="hud">
+<div>المتبقي: <b id="rem">15$</b></div>
+<div>اللاعبون: <b id="cnt">0 / 5</b></div>
+</div>
+<div id="tiers"></div>
+<div class="squad">
+<h3>تشكيلتك الخماسية المختارة</h3>
+<div class="slots" id="slots"></div>
+</div>
+<div class="msg" id="msg"></div>
 <div class="tools">
-<button type="button" class="save" id="save">حفظ الشجرة كصورة</button>
-<button type="button" onclick="init()">تغيير اللاعبين</button>
+<button type="button" class="save" id="save" disabled>حفظ التشكيلة كصورة</button>
+<button type="button" onclick="resetAll()">إعادة</button>
 </div>
 </div>
 <script>
-const P=[
- {id:"messi",name:"ميسي",img:"photo/messi.jpg.JPEG"},
- {id:"mara",name:"مارادونا",img:"photo/maradona.jpg.JPG"},
- {id:"r9",name:"الظاهرة R9",img:"photo/ronaldo.jpg.JPG"},
- {id:"cr7",name:"كريستيانو",img:"photo/cr.jpg.JPG"},
- {id:"pele",name:"بيليه",img:"photo/pele.jpg.JPG"},
- {id:"cruyff",name:"كرويف",img:"photo/johan.jpg.JPG"},
- {id:"zidane",name:"زيدان",img:"photo/ziedan.jpg.JPG"},
- {id:"beck",name:"بيكنباور",img:"photo/binkabowr.jpg.JPG"},
- {id:"difa",name:"دي ستيفانو",img:"photo/de.jpg.jpg"},
- {id:"r10",name:"رونالدينيو",img:"photo/rone.jpg.jpg"},
- {id:"neymar",name:"نيمار",img:"photo/ney.jpg.JPG"},
- {id:"iniesta",name:"إنيستا",img:"photo/in.jpg.jpg"},
- {id:"xavi",name:"تشافي",img:"photo/xavi.jpg.JPG"},
- {id:"modric",name:"مودريتش",img:"photo/luka.jpg.JPG"}
+const DATA=[
+ {price:5,color:"#8e5b53",players:[
+  {id:"messi",name:"ميسي",img:"photo/messi.jpg.JPEG"},
+  {id:"cr7",name:"كريستيانو",img:"photo/cr.jpg.JPG"},
+  {id:"mara",name:"مارادونا",img:"photo/maradona.jpg.JPG"},
+  {id:"pele",name:"بيليه",img:"photo/pele.jpg.JPG"}
+ ]},
+ {price:4,color:"#b07850",players:[
+  {id:"r9",name:"الظاهرة R9",img:"photo/ronaldo.jpg.JPG"},
+  {id:"zidane",name:"زيدان",img:"photo/ziedan.jpg.JPG"},
+  {id:"cruyff",name:"كرويف",img:"photo/johan.jpg.JPG"},
+  {id:"r10",name:"رونالدينيو",img:"photo/rone.jpg.jpg"}
+ ]},
+ {price:3,color:"#97915c",players:[
+  {id:"beck",name:"بيكنباور",img:"photo/binkabowr.jpg.JPG"},
+  {id:"difa",name:"دي ستيفانو",img:"photo/de.jpg.jpg"},
+  {id:"neymar",name:"نيمار",img:"photo/ney.jpg.JPG"}
+ ]},
+ {price:2,color:"#5d7a58",players:[
+  {id:"iniesta",name:"إنيستا",img:"photo/in.jpg.jpg"},
+  {id:"xavi",name:"تشافي",img:"photo/xavi.jpg.JPG"},
+  {id:"modric",name:"مودريتش",img:"photo/luka.jpg.JPG"}
+ ]}
 ];
-const POS=[
- {x:11,y:14,c:"qf"},{x:11,y:38,c:"qf"},{x:11,y:62,c:"qf"},{x:11,y:86,c:"qf"},
- {x:89,y:14,c:"qf"},{x:89,y:38,c:"qf"},{x:89,y:62,c:"qf"},{x:89,y:86,c:"qf"},
- {x:30,y:26,c:"sf"},{x:30,y:74,c:"sf"},
- {x:70,y:26,c:"sf"},{x:70,y:74,c:"sf"},
- {x:42,y:50,c:"fin"},{x:58,y:50,c:"fin"},
- {x:50,y:23,c:"win"}
-];
-const NEXT={0:8,1:8,2:9,3:9,4:10,5:10,6:11,7:11,8:12,9:12,10:13,11:13,12:14,13:14};
-let slots=[],imgs={};
-P.forEach(p=>{const im=new Image();im.onload=()=>imgs[p.id]=im;im.src=p.img});
+let team=[],imgs={};
+DATA.forEach(t=>t.players.forEach(p=>{
+ const im=new Image();im.onload=()=>imgs[p.id]=im;im.src=p.img;
+}));
 
-function init(){
- const sh=[...P].sort(()=>Math.random()-.5).slice(0,8);
- slots=Array(15).fill(null);
- for(let i=0;i<8;i++)slots[i]=sh[i];
- draw();
+function toggle(p,price){
+ msg.textContent="";
+ const idx=team.findIndex(x=>x.id===p.id);
+ if(idx>-1){team.splice(idx,1);render();return;}
+ const spent=team.reduce((a,b)=>a+b.price,0);
+ if(team.length>=5){msg.textContent="اكتمل العدد! احذف لاعباً لتغيير اختيارك";return;}
+ if(spent+price>15){msg.textContent="الميزانية لا تكفي! اختر لاعباً أقل سعراً";return;}
+ team.push({...p,price});
+ render();
 }
-function pick(i){
- if(!slots[i]||i===14)return;
- const nxt=NEXT[i];
- slots[nxt]=slots[i];
- if(nxt<12){slots[NEXT[nxt]]=null;slots[14]=null;}
- else if(nxt<14){slots[14]=null;}
- draw();
+
+function resetAll(){team=[];msg.textContent="";render();}
+
+function render(){
+ const spent=team.reduce((a,b)=>a+b.price,0);
+ const left=15-spent;
+ rem.textContent=left+"$";
+ rem.className=left<=2?"warn":"";
+ cnt.textContent=`${team.length} / 5`;
+ save.disabled=team.length!==5;
+
+ tiers.innerHTML=DATA.map(t=>`
+  <div class="tier">
+   <div class="price" style="background:${t.color}">${t.price}$</div>
+   <div class="p-list">
+    ${t.players.map(p=>{
+     const isSel=team.some(x=>x.id===p.id);
+     const tooExp=!isSel&&(team.length>=5||spent+t.price>15);
+     return `<div class="p-item${isSel?' sel':''}${tooExp?' dis':''}" onclick='toggle(${JSON.stringify(p)},${t.price})'>
+      <div class="av" style="background-image:url('${p.img}')"></div>
+      <span>${p.name}</span>
+     </div>`;
+    }).join("")}
+   </div>
+  </div>
+ `).join("");
+
+ let sHtml="";
+ for(let i=0;i<5;i++){
+  const p=team[i];
+  if(p){
+   sHtml+=`<div class="slot" onclick='toggle(${JSON.stringify(p)},${p.price})'><div class="av" style="background-image:url('${p.img}')"></div><span>${p.name}</span><small>${p.price}$</small></div>`;
+  }else{
+   sHtml+=`<div class="slot"><span style="opacity:.4">+</span></div>`;
+  }
+ }
+ slots.innerHTML=sHtml;
 }
-function draw(){
- const lines=`<svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <path d="M11,14 H21 V38 H11 M21,26 H30"/>
-  <path d="M11,62 H21 V86 H11 M21,74 H30"/>
-  <path d="M89,14 H79 V38 H89 M79,26 H70"/>
-  <path d="M89,62 H79 V86 H89 M79,74 H70"/>
-  <path d="M30,26 V74 M30,50 H42"/>
-  <path d="M70,26 V74 M70,50 H58"/>
-  <path d="M42,50 H58 M50,50 V23"/>
- </svg>`;
- let nodes="";
- POS.forEach((pt,i)=>{
-  const p=slots[i];
-  const st=p?`background-image:url('${p.img}')`:"";
-  const lbl=i===14?(p?`🏆 ${p.name}`:"البطل"):(p?p.name:"");
-  nodes+=`<div class="node ${pt.c}" style="left:${pt.x}%;top:${pt.y}%" onclick="pick(${i})"><div class="av" style="${st}">${p?"":"?"}</div>${lbl?`<span>${lbl}</span>`:""}</div>`;
- });
- bracket.innerHTML=lines+nodes;
-}
+
 save.onclick=async()=>{
  save.textContent="جاري الحفظ...";await document.fonts.ready;
- const W=1000,H=1080,cv=document.createElement("canvas");cv.width=W;cv.height=H;const c=cv.getContext("2d");
+ const W=900,H=560,cv=document.createElement("canvas");cv.width=W;cv.height=H;const c=cv.getContext("2d");
  c.fillStyle="#ede6d8";c.fillRect(0,0,W,H);
- c.fillStyle="#231f1a";c.font="700 56px 'Aref Ruqaa',serif";c.textAlign="center";c.fillText("بطولة الأساطير",W/2,75);
- const ox=40,oy=130,bw=W-80,bh=H-170;
- const px=x=>ox+(x/100)*bw,py=y=>oy+(y/100)*bh;
- c.strokeStyle="#8e5b53";c.lineWidth=5;c.globalAlpha=.55;
- const segs=[
-  [[11,14],[21,14],[21,38],[11,38]],[[21,26],[30,26]],
-  [[11,62],[21,62],[21,86],[11,86]],[[21,74],[30,74]],
-  [[89,14],[79,14],[79,38],[89,38]],[[79,26],[70,26]],
-  [[89,62],[79,62],[79,86],[89,86]],[[79,74],[70,74]],
-  [[30,26],[30,74]],[[30,50],[42,50]],
-  [[70,26],[70,74]],[[70,50],[58,50]],
-  [[42,50],[58,50]],[[50,50],[50,23]]
- ];
- segs.forEach(s=>{c.beginPath();c.moveTo(px(s[0][0]),py(s[0][1]));s.slice(1).forEach(pt=>c.lineTo(px(pt[0]),py(pt[1])));c.stroke()});
- c.globalAlpha=1;
- POS.forEach((pt,i)=>{
-  const p=slots[i],ix=px(pt.x),iy=py(pt.y),rad=i===14?58:(i>=12?44:(i>=8?40:37));
+ c.strokeStyle="#2b2620";c.lineWidth=6;c.strokeRect(20,20,W-40,H-40);
+ c.fillStyle="#231f1a";c.font="700 46px 'Aref Ruqaa',serif";c.textAlign="center";
+ c.fillText("تشكيلتي الخماسية • تحدي الـ 15$",W/2,85);
+ const spent=team.reduce((a,b)=>a+b.price,0);
+ c.fillStyle="#5d7a58";c.font="800 22px Cairo";
+ c.fillText(`التكلفة الإجمالية: ${spent}$ من 15$`,W/2,135);
+
+ const cw=(W-100)/5;
+ team.forEach((p,i)=>{
+  const cx=W-50-(i+1)*cw,cy=180;
+  c.fillStyle="#e4dccb";c.fillRect(cx+6,cy,cw-12,290);
+  c.strokeStyle="#c9bfa8";c.lineWidth=2;c.strokeRect(cx+6,cy,cw-12,290);
+  const rad=52,ix=cx+cw/2,iy=cy+85,im=imgs[p.id];
   c.save();c.beginPath();c.arc(ix,iy,rad,0,7);c.clip();
-  c.fillStyle="#e2d9c6";c.fillRect(ix-rad,iy-rad,rad*2,rad*2);
-  if(p&&imgs[p.id]){const im=imgs[p.id],m=Math.min(im.width,im.height);c.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,ix-rad,iy-rad,rad*2,rad*2)}
+  if(im){const m=Math.min(im.width,im.height);c.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,ix-rad,iy-rad,rad*2,rad*2)}
   c.restore();
-  c.beginPath();c.arc(ix,iy,rad,0,7);c.lineWidth=i===14?6:4;c.strokeStyle=i===14?"#a07d2a":"#fff";c.stroke();
-  if(p){
-   c.fillStyle=i===14?"#a07d2a":"#231f1a";c.font=i===14?"800 22px Cairo":"800 17px Cairo";
-   c.fillText(i===14?`🏆 ${p.name}`:p.name,ix,iy+rad+22);
-  }
+  c.beginPath();c.arc(ix,iy,rad,0,7);c.lineWidth=4;c.strokeStyle="#fff";c.stroke();
+  c.fillStyle="#231f1a";c.font="800 20px Cairo";c.fillText(p.name,ix,iy+rad+38);
+  c.fillStyle="#8e5b53";c.font="800 22px Georgia";c.fillText(p.price+"$",ix,iy+rad+72);
  });
+
  cv.toBlob(async b=>{
-  const f=new File([b],"bracket.png",{type:"image/png"});
+  const f=new File([b],"team15.png",{type:"image/png"});
   if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]})}catch(e){}}
-  else{const a=document.createElement("a");a.download="bracket.png";a.href=URL.createObjectURL(b);a.click()}
-  save.textContent="حفظ الشجرة كصورة";
+  else{const a=document.createElement("a");a.download="team15.png";a.href=URL.createObjectURL(b);a.click()}
+  save.textContent="حفظ التشكيلة كصورة";
  });
 };
-init();
+render();
 </script>
 </body>
 </html>
