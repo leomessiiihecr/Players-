@@ -3,45 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>تصنيف لاعبي كرة القدم</title>
+<title>بطولة الأساطير • خروج المغلوب</title>
 <link href="https://googleapis.com" rel="stylesheet">
 <style>
-:root{--bg:#cfc6ad;--paper:#ede6d8;--ink:#2b2620;--cell:#e6dfd1;--line:#c9bfa8;--sel:#1d9bf0}
+:root{--bg:#cfc6ad;--paper:#ede6d8;--ink:#2b2620;--card:#e6dfd1;--line:#c9bfa8;--gold:#a07d2a}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-serif;padding:8px}
-.board{background:var(--paper);border-radius:18px;padding:12px;max-width:680px;margin:0 auto;box-shadow:0 6px 24px #0002}
-h1{font-family:'Aref Ruqaa',serif;font-size:34px;text-align:center;margin:4px 0 12px;color:#231f1a}
-.grid-wrap,.row,.cells{display:flex;gap:1px;background:var(--line)}
-.grid-wrap{border:1px solid var(--line);flex-direction:column}
-.lab{width:68px;flex:none;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px 2px}
-.lab b{font-size:20px;font-weight:800;font-family:Georgia,serif}
-.lab small{font-size:10px;margin-top:2px}
-.cells{flex:1;display:grid;grid-template-columns:repeat(6,1fr)}
-.cell{background:var(--cell);min-height:92px;display:flex;align-items:center;justify-content:center;padding:4px 2px}
-.cell.big{grid-column:span 3;min-height:96px}
-.bank{margin-top:12px;background:var(--cell);border:1px solid var(--line);border-radius:12px;padding:8px;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;min-height:82px}
-.card{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;width:100%;touch-action:none;user-select:none;-webkit-user-select:none}
-.ghost{position:fixed;z-index:9;pointer-events:none;opacity:.9;transform:scale(1.1)}
-.av{width:100%;max-width:52px;aspect-ratio:1;border-radius:50%;background-size:cover;background-position:center;border:1.5px solid #fff;box-shadow:0 2px 5px #0002}
-.big .av{max-width:62px}
-.card span{font-size:9.5px;text-align:center;line-height:1.15}
-.big .card span,.bank .card span{font-size:11px}
-.foot{display:flex;justify-content:space-between;margin-top:8px;padding:0 4px;font-size:11px;color:#5a5245;direction:ltr}
-.tools{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12px}
-button{border:0;background:#2b2620;color:#ede6d8;border-radius:12px;padding:8px 16px;font-family:inherit;font-weight:700;cursor:pointer}
-button.save{background:#5d7a58;color:#fff;margin-inline-end:6px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-serif;padding:10px}
+.board{background:var(--paper);border-radius:22px;padding:16px;max-width:540px;margin:0 auto;box-shadow:0 6px 24px #0002;text-align:center}
+h1{font-family:'Aref Ruqaa',serif;font-size:32px;margin:0 0 6px;color:#231f1a}
+.badge{display:inline-block;background:#8e5b53;color:#fff;padding:4px 16px;border-radius:20px;font-size:13px;font-weight:800;margin-bottom:4px}
+.sub{font-size:12px;color:#6e6555;margin-bottom:14px}
+.arena{display:flex;flex-direction:column;gap:10px;align-items:center}
+.player{width:100%;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:16px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:transform .15s,border-color .15s;user-select:none}
+.player:active{transform:scale(.97);border-color:#8e5b53}
+.av{width:84px;height:84px;border-radius:50%;background-size:cover;background-position:center;border:3px solid #fff;box-shadow:0 4px 10px #0002;flex:none}
+.info{text-align:right;flex:1}
+.info b{font-size:19px;display:block;color:#231f1a}
+.info span{font-size:12px;color:#6e6555}
+.vs{width:44px;height:44px;border-radius:50%;background:#2b2620;color:#ede6d8;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:800;font-size:16px;margin:-6px 0;z-index:2;border:3px solid var(--paper)}
+.champ{background:var(--card);border:2px solid var(--gold);border-radius:20px;padding:24px 16px;margin:10px 0}
+.champ .av{width:130px;height:130px;margin:0 auto 12px;border:4px solid var(--gold)}
+.champ h2{margin:0;font-size:24px;color:#231f1a}
+.champ p{margin:4px 0 0;font-size:13px;color:var(--gold)}
+.tools{margin-top:16px;display:flex;justify-content:center;gap:8px}
+button{border:0;background:#2b2620;color:#ede6d8;border-radius:14px;padding:10px 20px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
+button.save{background:#5d7a58;color:#fff}
 </style>
 </head>
 <body>
 <div class="board">
-<h1>تصنيف لاعبي كرة القدم</h1>
-<div class="grid-wrap" id="rows"></div>
-<div class="foot"><span>X: Witvw</span><span>All design rights reserved</span></div>
-<div class="bank" id="bank"></div>
-<div class="tools">
-<span>اسحب اللاعب وأفلته في الخانة</span>
-<div><button type="button" class="save" id="save">حفظ كصورة</button><button type="button" id="reset">إعادة</button></div>
-</div>
+<h1>بطولة الأساطير</h1>
+<div id="app"></div>
+<div class="tools" id="tools"></div>
 </div>
 <script>
 const P=[
@@ -60,68 +53,61 @@ const P=[
  {id:"xavi",name:"تشافي هيرنانديز",img:"photo/xavi.jpg.JPG"},
  {id:"modric",name:"لوكا مودريتش",img:"photo/luka.jpg.JPG"}
 ];
-const R=[
- {code:"SSS",label:"الأفضل",color:"#8e5b53",count:2},
- {code:"SS",label:"لاعب كبير",color:"#b07850",count:6},
- {code:"S",label:"لاعب ممتاز",color:"#97915c",count:6}
-];
-let pos={},imgs={},drag=null;
-P.forEach(p=>{pos[p.id]="b";const im=new Image();im.onload=()=>{imgs[p.id]=im;render()};im.src=p.img});
-const card=p=>`<div class="card" data-id="${p.id}"><div class="av" style="background-image:url('${p.img}')"></div><span>${p.name}</span></div>`;
-function render(){
- let s=0,h="";
- R.forEach(r=>{
-  h+=`<div class="row"><div class="lab" style="background:${r.color}"><b>${r.code}</b><small>${r.label}</small></div><div class="cells">`;
-  for(let i=0;i<r.count;i++,s++){const id=Object.keys(pos).find(k=>pos[k]===s);h+=`<div class="cell${r.count==2?' big':''}" data-slot="${s}">${id?card(P.find(x=>x.id==id)):''}</div>`;}
-  h+="</div></div>";
- });
- rows.innerHTML=h;bank.innerHTML=P.filter(p=>pos[p.id]==="b").map(card).join("");
+let imgs={},round=[],next=[],idx=0,champ=null;
+P.forEach(p=>{const im=new Image();im.onload=()=>imgs[p.id]=im;im.src=p.img});
+
+function start(){
+ const sh=[...P].sort(()=>Math.random()-.5);
+ round=sh.slice(0,12);
+ next=sh.slice(12);
+ idx=0;champ=null;render();
 }
-document.addEventListener("pointerdown",e=>{const c=e.target.closest(".card");if(c)drag={id:c.dataset.id,x:e.clientX,y:e.clientY,el:c}});
-document.addEventListener("pointermove",e=>{
- if(!drag)return;
- if(!drag.g&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>6){drag.g=drag.el.cloneNode(true);drag.g.className="card ghost";drag.g.style.width=drag.el.offsetWidth+"px";document.body.appendChild(drag.g);drag.el.style.opacity=.35}
- if(drag.g){drag.g.style.left=(e.clientX-drag.g.offsetWidth/2)+"px";drag.g.style.top=(e.clientY-drag.g.offsetHeight/2)+"px"}
-});
-document.addEventListener("pointerup",e=>{
- if(!drag)return;const d=drag;drag=null;if(!d.g)return;d.g.remove();
- const t=document.elementFromPoint(e.clientX,e.clientY),tc=t&&t.closest(".card"),cell=t&&t.closest(".cell"),bk=t&&t.closest("#bank");
- if(tc&&tc.dataset.id!==d.id){[pos[d.id],pos[tc.dataset.id]]=[pos[tc.dataset.id],pos[d.id]]}
- else if(cell&&!tc)pos[d.id]=+cell.dataset.slot;
- else if(bk&&!tc)pos[d.id]="b";
+function stageName(){
+ const total=round.length+next.length;
+ if(total>8)return "الدور التمهيدي";
+ if(total===8)return "ربع النهائي";
+ if(total===4)return "نصف النهائي";
+ return "المباراة النهائية";
+}
+function pick(p){
+ next.push(p);
+ idx+=2;
+ if(idx>=round.length){
+  if(next.length===1){champ=next[0];}
+  else{round=[...next];next=[];idx=0;}
+ }
  render();
-});
-reset.onclick=()=>{P.forEach(p=>pos[p.id]="b");render()};
-save.onclick=async()=>{
- save.textContent="جاري الحفظ...";await document.fonts.ready;
- const W=1080,pad=36,hh=100,rh=185,fh=50,H=pad*2+hh+rh*3+fh,cv=document.createElement("canvas");cv.width=W;cv.height=H;const c=cv.getContext("2d");
- c.fillStyle="#ede6d8";c.fillRect(0,0,W,H);c.fillStyle="#231f1a";c.font="700 54px 'Aref Ruqaa',serif";c.textAlign="center";c.textBaseline="middle";c.fillText("تصنيف لاعبي كرة القدم",W/2,pad+45);
- const gx=pad,gy=pad+hh,gw=W-pad*2,lw=125,cw0=gw-lw;c.fillStyle="#c9bfa8";c.fillRect(gx-2,gy-2,gw+4,rh*3+4);
- let s=0;
- R.forEach((r,ri)=>{
-  const ry=gy+ri*rh,lx=gx+cw0;c.fillStyle=r.color;c.fillRect(lx,ry,lw,rh-2);c.fillStyle="#fff";c.font="800 32px Georgia";c.fillText(r.code,lx+lw/2,ry+rh/2-16);c.font="700 18px Cairo";c.fillText(r.label,lx+lw/2,ry+rh/2+20);
-  const cw=cw0/r.count;
-  for(let ci=0;ci<r.count;ci++,s++){
-   const cx=gx+cw0-(ci+1)*cw;c.fillStyle="#e6dfd1";c.fillRect(cx+1,ry,cw-2,rh-2);
-   const pid=Object.keys(pos).find(k=>pos[k]===s);
-   if(pid){
-    const p=P.find(x=>x.id==pid),rad=r.count==2?46:38,ix=cx+cw/2,iy=ry+rad+20,im=imgs[pid];
-    c.save();c.beginPath();c.arc(ix,iy,rad,0,7);c.clip();if(im){const m=Math.min(im.width,im.height);c.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,ix-rad,iy-rad,rad*2,rad*2)}c.restore();
-    c.beginPath();c.arc(ix,iy,rad,0,7);c.lineWidth=3;c.strokeStyle="#fff";c.stroke();
-    c.fillStyle="#2b2620";c.font=r.count==2?"700 19px Cairo":"700 15px Cairo";
-    const w=p.name.split(" ");let l="",ls=[];w.forEach(x=>{let t=l?l+" "+x:x;if(c.measureText(t).width>cw-10&&l){ls.push(l);l=x}else l=t});ls.push(l);ls.forEach((x,i)=>c.fillText(x,ix,iy+rad+24+i*19));
-   }
-  }
- });
- c.fillStyle="#5a5245";c.font="700 19px Cairo";c.textAlign="left";c.fillText("X: Witvw",gx+6,gy+rh*3+28);c.textAlign="right";c.fillText("All design rights reserved",gx+gw-6,gy+rh*3+28);
+}
+function render(){
+ if(champ){
+  app.innerHTML=`<div class="badge">بطل البطولة</div><div class="champ"><div class="av" style="background-image:url('${champ.img}')"></div><h2>${champ.name}</h2><p>الأفضل في التاريخ باختيارك</p></div>`;
+  tools.innerHTML=`<button type="button" class="save" onclick="saveImg()">حفظ البطل كصورة</button><button type="button" onclick="start()">بطولة جديدة</button>`;
+  return;
+ }
+ const p1=round[idx],p2=round[idx+1],mNum=(idx/2)+1,mTotal=round.length/2;
+ app.innerHTML=`<div class="badge">${stageName()}</div><div class="sub">المواجهة ${mNum} من ${mTotal} • اضغط على اللاعب الأفضل</div><div class="arena"><div class="player" onclick='pick(${JSON.stringify(p1)})'><div class="av" style="background-image:url('${p1.img}')"></div><div class="info"><b>${p1.name}</b><span>اضغط للتأهل</span></div></div><div class="vs">VS</div><div class="player" onclick='pick(${JSON.stringify(p2)})'><div class="av" style="background-image:url('${p2.img}')"></div><div class="info"><b>${p2.name}</b><span>اضغط للتأهل</span></div></div></div>`;
+ tools.innerHTML=`<button type="button" onclick="start()">إعادة خلط اللاعبين</button>`;
+}
+async function saveImg(){
+ await document.fonts.ready;
+ const W=800,H=900,cv=document.createElement("canvas");cv.width=W;cv.height=H;const c=cv.getContext("2d");
+ c.fillStyle="#ede6d8";c.fillRect(0,0,W,H);
+ c.strokeStyle="#a07d2a";c.lineWidth=8;c.strokeRect(30,30,W-60,H-60);
+ c.fillStyle="#231f1a";c.font="700 58px 'Aref Ruqaa',serif";c.textAlign="center";c.fillText("بطل الأساطير",W/2,130);
+ const im=imgs[champ.id],rad=170,ix=W/2,iy=400;
+ c.save();c.beginPath();c.arc(ix,iy,rad,0,7);c.clip();
+ if(im){const m=Math.min(im.width,im.height);c.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,ix-rad,iy-rad,rad*2,rad*2)}
+ c.restore();
+ c.beginPath();c.arc(ix,iy,rad,0,7);c.lineWidth=8;c.strokeStyle="#a07d2a";c.stroke();
+ c.fillStyle="#231f1a";c.font="800 46px Cairo";c.fillText(champ.name,W/2,650);
+ c.fillStyle="#8e5b53";c.font="700 28px Cairo";c.fillText("الأفضل في التاريخ",W/2,715);
  cv.toBlob(async b=>{
-  const f=new File([b],"Witvw.png",{type:"image/png"});
+  const f=new File([b],"champion.png",{type:"image/png"});
   if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]})}catch(e){}}
-  else{const a=document.createElement("a");a.download="Witvw.png";a.href=URL.createObjectURL(b);a.click()}
-  save.textContent="حفظ كصورة";
+  else{const a=document.createElement("a");a.download="champion.png";a.href=URL.createObjectURL(b);a.click()}
  });
-};
-render();
+}
+start();
 </script>
 </body>
 </html>
