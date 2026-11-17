@@ -63,33 +63,33 @@ button.save:disabled{opacity:.4;cursor:not-allowed}
 <script>
 const DATA=[
  {key:"gk",label:"الحارس",color:"#3a6073",players:[
-  {id:"yashin",name:"ليف ياشين",price:5,col:"#4a6fa5"},
-  {id:"buffon",name:"بوفون",price:4,col:"#5c768d"},
-  {id:"neuer",name:"مانويل نوير",price:3,col:"#6d8a96"}
+  {id:"yashin",file:"yashin",name:"ليف ياشين",price:5,col:"#4a6fa5"},
+  {id:"buffon",file:"buffon",name:"بوفون",price:4,col:"#5c768d"},
+  {id:"neuer",file:"neuer",name:"مانويل نوير",price:3,col:"#6d8a96"}
  ]},
  {key:"df",label:"الدفاع",color:"#5d7a58",players:[
-  {id:"maldini",name:"باولو مالديني",price:5,col:"#4f772d"},
-  {id:"ramos",name:"سيرخيو راموس",price:4,col:"#6a994e"},
-  {id:"carlos",name:"روبرتو كارلوس",price:3,col:"#386641"}
+  {id:"maldini",file:"maldini",name:"باولو مالديني",price:5,col:"#4f772d"},
+  {id:"ramos",file:"ramos",name:"سيرخيو راموس",price:4,col:"#6a994e"},
+  {id:"puyol",file:"puyol",name:"كارليس بويول",price:3,col:"#386641"}
  ]},
  {key:"mf",label:"الوسط",color:"#b07850",players:[
-  {id:"platini",name:"بلاتيني",price:5,col:"#bc6c25"},
-  {id:"matthaus",name:"ماتيوس",price:4,col:"#dda15e"},
-  {id:"pirlo",name:"أندريا بيرلو",price:3,col:"#9c6644"}
+  {id:"zidane",file:"ziedan",name:"زين الدين زيدان",price:5,col:"#bc6c25"},
+  {id:"iniesta",file:"in",name:"أندريس إنيستا",price:4,col:"#dda15e"},
+  {id:"xavi",file:"xavi",name:"تشافي هيرنانديز",price:3,col:"#9c6644"}
  ]},
  {key:"fw",label:"الهجوم",color:"#8e5b53",players:[
-  {id:"henry",name:"تييري هنري",price:5,col:"#9e2a2b"},
-  {id:"vanbasten",name:"فان باستن",price:4,col:"#b56576"},
-  {id:"muller",name:"جيرد مولر",price:3,col:"#6d597a"}
+  {id:"messi",file:"messi",name:"ليونيل ميسي",price:5,col:"#9e2a2b"},
+  {id:"cr7",file:"cr",name:"كريستيانو رونالدو",price:4,col:"#b56576"},
+  {id:"r9",file:"ronaldo",name:"الظاهرة رونالدو",price:3,col:"#6d597a"}
  ]}
 ];
 let picks={},imgs={},imgUrls={};
 DATA.forEach(r=>r.players.forEach(p=>{
- const exts=[".jpg",".JPG",".jpeg",".JPEG",".jpg.JPG",".jpg.JPEG"];
+ const exts=[".jpg",".JPG",".jpeg",".JPEG",".jpg.JPG",".jpg.JPEG",".jpg.jpg"];
  let i=0;
  const tryLoad=()=>{
   if(i>=exts.length)return;
-  const src="photo/"+p.id+exts[i++];
+  const src="photo/"+p.file+exts[i++];
   const im=new Image();
   im.onload=()=>{imgs[p.id]=im;imgUrls[p.id]=src;render()};
   im.onerror=tryLoad;
