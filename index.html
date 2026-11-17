@@ -42,7 +42,22 @@ button.reset{border:0;background:var(--ink);color:var(--paper);border-radius:14p
 </div>
 <input type="file" id="file" accept="image/*" hidden>
 <script>
-const P=[["messi","ليونيل ميسي"],["mara","دييغو مارادونا"],["r9","رونالدو نازاريو"],["cr7","كريستيانو رونالدو"],["pele","بيليه"],["cruyff","يوهان كرويف"],["zidane","زين الدين زيدان"],["beck","فرانز بيكنباور"],["difa","ألفريدو دي ستيفانو"],["r10","رونالدينيو"],["neymar","نيمار جونيور"],["iniesta","أندريس إنيستا"],["xavi","تشافي هيرنانديز"],["modric","لوكا مودريتش"]];
+const P=[
+  ["messi","ليونيل ميسي","photo/messi.jpg.JPEG"],
+  ["mara","دييغو مارادونا","photo/maradona.jpg.JPG"],
+  ["r9","رونالدو نازاريو","photo/ronaldo.jpg.JPG"],
+  ["cr7","كريستيانو رونالدو","photo/cr.jpg.JPG"],
+  ["pele","بيليه","photo/pele.jpg.JPG"],
+  ["cruyff","يوهان كرويف","photo/johan.jpg.JPG"],
+  ["zidane","زين الدين زيدان","photo/ziedan.jpg.JPG"],
+  ["beck","فرانز بيكنباور","photo/binkabowr.jpg.JPG"],
+  ["difa","ألفريدو دي ستيفانو","photo/de.jpg.jpg"],
+  ["r10","رونالدينيو","photo/rone.jpg.jpg"],
+  ["neymar","نيمار جونيور","photo/ney.jpg.JPG"],
+  ["iniesta","أندريس إنيستا","photo/in.jpg.jpg"],
+  ["xavi","تشافي هيرنانديز","photo/xavi.jpg.JPG"],
+  ["modric","لوكا مودريتش","photo/luka.jpg.JPG"]
+];
 const ROWS=[["الأفضل","#8c5a52",2],["لاعب كبير","#a5714f",4],["لاعب جيد","#8f8a55",4],["لاعب عادي","#6c8468",4]];
 const COL=["#7b5ea7","#c0603a","#3a7ca5","#4a8f6a","#b0488a","#a07d2a","#566","#a14"];
 let pos={},photos={},sel=null;
@@ -50,7 +65,7 @@ P.forEach(p=>pos[p[0]]="b");
 const name=id=>P.find(p=>p[0]==id)[1];
 function card(id,big){
  const ph=photos[id];
- return `<div class="card${sel==id?' sel':''}" data-id="${id}"><button class="cam" data-cam="${id}">📷</button><div class="av" style="${ph?`background-image:url(${ph})`:`background:${COL[P.findIndex(p=>p[0]==id)%COL.length]}`}">${ph?'':name(id)[0]}</div><span>${name(id)}</span></div>`;
+ return `<div class="card${sel==id?' sel':''}" data-id="${id}"><button class="cam" data-cam="${id}">📷</button><div class="av" style="${ph?`background-image:url('${ph}')`:`background:${COL[P.findIndex(p=>p[0]==id)%COL.length]}`}">${ph?'':name(id)[0]}</div><span>${name(id)}</span></div>`;
 }
 function render(){
  let s=0,h="";
@@ -116,7 +131,7 @@ document.getElementById("file").addEventListener("change",e=>{
  r.readAsDataURL(f);e.target.value="";
 });
 document.getElementById("reset").onclick=()=>{P.forEach(p=>pos[p[0]]="b");sel=null;render()};
-P.forEach(p=>{const im=new Image();im.onload=()=>{if(!photos[p[0]]){photos[p[0]]="photos/"+p[0]+".jpg";render()}};im.src="photos/"+p[0]+".jpg"});
+P.forEach(p=>{const im=new Image();im.onload=()=>{if(!photos[p[0]]){photos[p[0]]=p[2];render()}};im.src=p[2]});
 render();
 </script>
 </body>
