@@ -44,19 +44,38 @@ button.save{background:#5d7a58;color:#fff;margin-inline-end:6px}
 </div>
 </div>
 <script>
-const P=[["messi","ليونيل ميسي","photo/messi.jpg.JPEG"],["mara","دييغو مارادونا","photo/maradona.jpg.JPG"],["r9","رونالدو نازاريو","photo/ronaldo.jpg.JPG"],["cr7","كريستيانو رونالدو","photo/cr.jpg.JPG"],["pele","بيليه","photo/pele.jpg.JPG"],["cruyff","يوهان كرويف","photo/johan.jpg.JPG"],["zidane","زين الدين زيدان","photo/ziedan.jpg.JPG"],["beck","فرانز بيكنباور","photo/binkabowr.jpg.JPG"],["difa","ألفريدو دي ستيفانو","photo/de.jpg.jpg"],["r10","رونالدينيو","photo/rone.jpg.jpg"],["neymar","نيمار جونيور","photo/ney.jpg.JPG"],["iniesta","أندريس إنيستا","photo/in.jpg.jpg"],["xavi","تشافي هيرنانديز","photo/xavi.jpg.JPG"],["modric","لوكا مودريتش","photo/luka.jpg.JPG"]];
-const R=[["SSS","الأفضل","#8e5b53",2],["SS","لاعب كبير","#b07850",6],["S","لاعب ممتاز","#97915c",6]];
+const P=[
+ {id:"messi",name:"ليونيل ميسي",img:"photo/messi.jpg.JPEG"},
+ {id:"mara",name:"دييغو مارادونا",img:"photo/maradona.jpg.JPG"},
+ {id:"r9",name:"رونالدو نازاريو",img:"photo/ronaldo.jpg.JPG"},
+ {id:"cr7",name:"كريستيانو رونالدو",img:"photo/cr.jpg.JPG"},
+ {id:"pele",name:"بيليه",img:"photo/pele.jpg.JPG"},
+ {id:"cruyff",name:"يوهان كرويف",img:"photo/johan.jpg.JPG"},
+ {id:"zidane",name:"زين الدين زيدان",img:"photo/ziedan.jpg.JPG"},
+ {id:"beck",name:"فرانز بيكنباور",img:"photo/binkabowr.jpg.JPG"},
+ {id:"difa",name:"ألفريدو دي ستيفانو",img:"photo/de.jpg.jpg"},
+ {id:"r10",name:"رونالدينيو",img:"photo/rone.jpg.jpg"},
+ {id:"neymar",name:"نيمار جونيور",img:"photo/ney.jpg.JPG"},
+ {id:"iniesta",name:"أندريس إنيستا",img:"photo/in.jpg.jpg"},
+ {id:"xavi",name:"تشافي هيرنانديز",img:"photo/xavi.jpg.JPG"},
+ {id:"modric",name:"لوكا مودريتش",img:"photo/luka.jpg.JPG"}
+];
+const R=[
+ {code:"SSS",label:"الأفضل",color:"#8e5b53",count:2},
+ {code:"SS",label:"لاعب كبير",color:"#b07850",count:6},
+ {code:"S",label:"لاعب ممتاز",color:"#97915c",count:6}
+];
 let pos={},imgs={},drag=null;
-P.forEach(p=>{pos[p]="b";const im=new Image();im.onload=()=>{imgs[p]=im;render()};im.src=p});
-const card=p=>`<div class="card" data-id="${p}"><div class="av" style="background-image:url('${p}')"></div><span>${p}</span></div>`;
+P.forEach(p=>{pos[p.id]="b";const im=new Image();im.onload=()=>{imgs[p.id]=im;render()};im.src=p.img});
+const card=p=>`<div class="card" data-id="${p.id}"><div class="av" style="background-image:url('${p.img}')"></div><span>${p.name}</span></div>`;
 function render(){
  let s=0,h="";
  R.forEach(r=>{
-  h+=`<div class="row"><div class="lab" style="background:${r}"><b>${r}</b><small>${r}</small></div><div class="cells">`;
-  for(let i=0;i<r;i++,s++){const id=Object.keys(pos).find(k=>pos[k]===s);h+=`<div class="cell${r==2?' big':''}" data-slot="${s}">${id?card(P.find(x=>x==id)):''}</div>`;}
+  h+=`<div class="row"><div class="lab" style="background:${r.color}"><b>${r.code}</b><small>${r.label}</small></div><div class="cells">`;
+  for(let i=0;i<r.count;i++,s++){const id=Object.keys(pos).find(k=>pos[k]===s);h+=`<div class="cell${r.count==2?' big':''}" data-slot="${s}">${id?card(P.find(x=>x.id==id)):''}</div>`;}
   h+="</div></div>";
  });
- rows.innerHTML=h;bank.innerHTML=P.filter(p=>pos[p]==="b").map(card).join("");
+ rows.innerHTML=h;bank.innerHTML=P.filter(p=>pos[p.id]==="b").map(card).join("");
 }
 document.addEventListener("pointerdown",e=>{const c=e.target.closest(".card");if(c)drag={id:c.dataset.id,x:e.clientX,y:e.clientY,el:c}});
 document.addEventListener("pointermove",e=>{
@@ -72,7 +91,7 @@ document.addEventListener("pointerup",e=>{
  else if(bk&&!tc)pos[d.id]="b";
  render();
 });
-reset.onclick=()=>{P.forEach(p=>pos[p]="b");render()};
+reset.onclick=()=>{P.forEach(p=>pos[p.id]="b");render()};
 save.onclick=async()=>{
  save.textContent="جاري الحفظ...";await document.fonts.ready;
  const W=1080,pad=36,hh=100,rh=185,fh=50,H=pad*2+hh+rh*3+fh,cv=document.createElement("canvas");cv.width=W;cv.height=H;const c=cv.getContext("2d");
@@ -80,17 +99,17 @@ save.onclick=async()=>{
  const gx=pad,gy=pad+hh,gw=W-pad*2,lw=125,cw0=gw-lw;c.fillStyle="#c9bfa8";c.fillRect(gx-2,gy-2,gw+4,rh*3+4);
  let s=0;
  R.forEach((r,ri)=>{
-  const ry=gy+ri*rh,lx=gx+cw0;c.fillStyle=r;c.fillRect(lx,ry,lw,rh-2);c.fillStyle="#fff";c.font="800 32px Georgia";c.fillText(r,lx+lw/2,ry+rh/2-16);c.font="700 18px Cairo";c.fillText(r,lx+lw/2,ry+rh/2+20);
-  const cw=cw0/r;
-  for(let ci=0;ci<r;ci++,s++){
+  const ry=gy+ri*rh,lx=gx+cw0;c.fillStyle=r.color;c.fillRect(lx,ry,lw,rh-2);c.fillStyle="#fff";c.font="800 32px Georgia";c.fillText(r.code,lx+lw/2,ry+rh/2-16);c.font="700 18px Cairo";c.fillText(r.label,lx+lw/2,ry+rh/2+20);
+  const cw=cw0/r.count;
+  for(let ci=0;ci<r.count;ci++,s++){
    const cx=gx+cw0-(ci+1)*cw;c.fillStyle="#e6dfd1";c.fillRect(cx+1,ry,cw-2,rh-2);
    const pid=Object.keys(pos).find(k=>pos[k]===s);
    if(pid){
-    const p=P.find(x=>x==pid),rad=r==2?46:38,ix=cx+cw/2,iy=ry+rad+20,im=imgs[pid];
+    const p=P.find(x=>x.id==pid),rad=r.count==2?46:38,ix=cx+cw/2,iy=ry+rad+20,im=imgs[pid];
     c.save();c.beginPath();c.arc(ix,iy,rad,0,7);c.clip();if(im){const m=Math.min(im.width,im.height);c.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,ix-rad,iy-rad,rad*2,rad*2)}c.restore();
     c.beginPath();c.arc(ix,iy,rad,0,7);c.lineWidth=3;c.strokeStyle="#fff";c.stroke();
-    c.fillStyle="#2b2620";c.font=r==2?"700 19px Cairo":"700 15px Cairo";
-    const w=p.split(" ");let l="",ls=[];w.forEach(x=>{let t=l?l+" "+x:x;if(c.measureText(t).width>cw-10&&l){ls.push(l);l=x}else l=t});ls.push(l);ls.forEach((x,i)=>c.fillText(x,ix,iy+rad+24+i*19));
+    c.fillStyle="#2b2620";c.font=r.count==2?"700 19px Cairo":"700 15px Cairo";
+    const w=p.name.split(" ");let l="",ls=[];w.forEach(x=>{let t=l?l+" "+x:x;if(c.measureText(t).width>cw-10&&l){ls.push(l);l=x}else l=t});ls.push(l);ls.forEach((x,i)=>c.fillText(x,ix,iy+rad+24+i*19));
    }
   }
  });
