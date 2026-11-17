@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تصنيف لاعبي كرة القدم</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Cairo:wght@600;700&display=swap">
+<style>
+:root{--bg:#cfc6ad;--paper:#ede6d8;--ink:#2b2620;--cell:#e4dccb;--line:#cbc1aa;--sel:#1d9bf0;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1a16;--paper:#2a2620;--ink:#f1e9d8;--cell:#38332a;--line:#4a4336}}
+:root[data-theme="dark"]{--bg:#1c1a16;--paper:#2a2620;--ink:#f1e9d8;--cell:#38332a;--line:#4a4336}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Cairo,system-ui,sans-serif;padding:12px}
+.board{background:var(--paper);border-radius:26px;padding:14px;max-width:560px;margin:0 auto;box-shadow:0 4px 18px #0003}
+h1{font-family:'Aref Ruqaa',serif;text-align:center;font-size:30px;margin:4px 0 8px;border-bottom:2px solid var(--ink);padding-bottom:6px}
+.row{display:flex;gap:4px;margin-bottom:4px}
+.lab{width:76px;flex:none;border-radius:4px;color:#fff;font-size:13px;line-height:1.3;display:flex;align-items:center;justify-content:center;text-align:center;padding:4px}
+.cells{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.cell{background:var(--cell);border:1px solid var(--line);border-radius:4px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;min-width:0}
+.cell.big{grid-column:span 2;aspect-ratio:2/1}
+.cell.hot{outline:2px dashed var(--sel)}
+.bank{margin-top:12px;background:var(--cell);border-radius:18px;padding:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-height:90px}
+.card{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;width:100%;padding:2px}
+.card{touch-action:none;user-select:none;-webkit-user-select:none}
+.ghost{position:fixed;z-index:9;pointer-events:none;opacity:.9;transform:scale(1.1)}
+.av{width:100%;max-width:64px;aspect-ratio:1;border-radius:50%;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#fff;border:2px solid #fff8}
+.big .av{max-width:72px}
+.card span{font-size:11px;font-weight:700;text-align:center;line-height:1.2}
+.cam{position:absolute;top:-2px;inset-inline-start:-2px;border:0;background:#fffd;border-radius:50%;width:22px;height:22px;font-size:12px;padding:0}
+.tools{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12px}
+button.reset{border:0;background:var(--ink);color:var(--paper);border-radius:14px;padding:6px 14px;font-family:inherit;font-weight:700}
+</style>
+</head>
+<body>
+<div class="board">
+<h1>تصنيف لاعبي كرة القدم</h1>
+<div id="rows"></div>
+<div class="bank" id="bank"></div>
+<div class="tools"><span>اسحب اللاعب وأفلته في الخانة</span><button class="reset" id="reset">إعادة</button></div>
+</div>
+<input type="file" id="file" accept="image/*" hidden>
+<script>
+const P=[["messi","ليونيل ميسي"],["mara","دييغو مارادونا"],["r9","رونالدو نازاريو"],["cr7","كريستيانو رونالدو"],["pele","بيليه"],["cruyff","يوهان كرويف"],["zidane","زين الدين زيدان"],["beck","فرانز بيكنباور"],["difa","ألفريدو دي ستيفانو"],["r10","رونالدينيو"],["neymar","نيمار جونيور"],["iniesta","أندريس إنيستا"],["xavi","تشافي هيرنانديز"],["modric","لوكا مودريتش"]];
+const ROWS=[["الأفضل","#8c5a52",2],["لاعب كبير","#a5714f",4],["لاعب جيد","#8f8a55",4],["لاعب عادي","#6c8468",4]];
+const COL=["#7b5ea7","#c0603a","#3a7ca5","#4a8f6a","#b0488a","#a07d2a","#566","#a14"];
+let pos={},photos={},sel=null;
+P.forEach(p=>pos[p[0]]="b");
+const name=id=>P.find(p=>p[0]==id)[1];
+function card(id,big){
+ const ph=photos[id];
+ return `<div class="card${sel==id?' sel':''}" data-id="${id}"><button class="cam" data-cam="${id}">📷</button><div class="av" style="${ph?`background-image:url(${ph})`:`background:${COL[P.findIndex(p=>p[0]==id)%COL.length]}`}">${ph?'':name(id)[0]}</div><span>${name(id)}</span></div>`;
+}
+function render(){
+ let s=0,h="";
+ ROWS.forEach(r=>{
+  h+=`<div class="row"><div class="lab" style="background:${r[1]}">${r[0]}</div><div class="cells">`;
+  for(let i=0;i<r[2];i++,s++){
+   const id=Object.keys(pos).find(k=>pos[k]===s);
+   h+=`<div class="cell${r[2]==2?' big':''}" data-slot="${s}">${id?card(id):''}</div>`;
+  }
+  h+="</div></div>";
+ });
+ document.getElementById("rows").innerHTML=h;
+ document.getElementById("bank").innerHTML=P.filter(p=>pos[p[0]]==="b").map(p=>card(p[0])).join("");
+}
+document.addEventListener("click",e=>{
+ const cam=e.target.closest("[data-cam]");
+ if(cam){e.stopPropagation();cur=cam.dataset.cam;document.getElementById("file").click();return}
+ const c=null;
+ if(c){
+  const id=c.dataset.id;
+  if(sel&&sel!==id&&pos[id]!=="b"){const t=pos[id];pos[id]=pos[sel];pos[sel]=t;sel=null}
+  else if(sel&&sel!==id){const t=pos[sel];pos[sel]=pos[id];pos[id]=t;sel=null}
+  else sel=sel===id?null:id;
+  render();return;
+ }
+ const cell=e.target.closest(".cell");
+ if(cell&&sel){pos[sel]=+cell.dataset.slot;sel=null;render();return}
+ if(e.target.closest("#bank")&&sel){pos[sel]="b";sel=null;render()}
+});
+let cur=null;
+let drag=null;
+document.addEventListener("pointerdown",e=>{
+ if(e.target.closest("[data-cam]"))return;
+ const c=e.target.closest(".card");if(!c)return;
+ drag={id:c.dataset.id,x:e.clientX,y:e.clientY,g:null,el:c};
+});
+document.addEventListener("pointermove",e=>{
+ if(!drag)return;
+ if(!drag.g){
+  if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)<6)return;
+  const g=drag.el.cloneNode(true);g.className="card ghost";g.style.width=drag.el.offsetWidth+"px";document.body.appendChild(g);drag.g=g;drag.el.style.opacity=.35;
+ }
+ drag.g.style.left=(e.clientX-drag.g.offsetWidth/2)+"px";drag.g.style.top=(e.clientY-drag.g.offsetHeight/2)+"px";
+});
+function endDrag(e,drop){
+ if(!drag)return;const d=drag;drag=null;
+ if(!d.g)return;d.g.remove();
+ if(drop){
+  const t=document.elementFromPoint(e.clientX,e.clientY);
+  const tc=t&&t.closest(".card"),cell=t&&t.closest(".cell"),bank=t&&t.closest("#bank");
+  if(tc&&tc.dataset.id!==d.id){const o=tc.dataset.id,tmp=pos[d.id];pos[d.id]=pos[o];pos[o]=tmp}
+  else if(cell&&!tc)pos[d.id]=+cell.dataset.slot;
+  else if(bank&&!tc)pos[d.id]="b";
+ }
+ render();
+}
+document.addEventListener("pointerup",e=>endDrag(e,true));
+document.addEventListener("pointercancel",e=>endDrag(e,false));
+document.getElementById("file").addEventListener("change",e=>{
+ const f=e.target.files[0];if(!f||!cur)return;
+ const r=new FileReader();
+ r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=160;const x=c.getContext("2d");const m=Math.min(im.width,im.height);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,160,160);photos[cur]=c.toDataURL("image/jpeg",.8);render()};im.src=r.result};
+ r.readAsDataURL(f);e.target.value="";
+});
+document.getElementById("reset").onclick=()=>{P.forEach(p=>pos[p[0]]="b");sel=null;render()};
+P.forEach(p=>{const im=new Image();im.onload=()=>{if(!photos[p[0]]){photos[p[0]]="photos/"+p[0]+".jpg";render()}};im.src="photos/"+p[0]+".jpg"});
+render();
+</script>
+</body>
+</html>
